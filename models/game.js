@@ -18,3 +18,4 @@ GameSchema
 });
 
 module.exports = mongoose.model('Game', GameSchema);
+

@@ -14,7 +14,8 @@ const GameInstanceSchema = new Schema(
       required: true, 
       enum: ['New', 'Excellent', 'Good', 'Fair', 'Poor'],
       default: 'New'
-    }
+    },
+    price: { type: Number, required: true }
   }
 );
 
@@ -25,3 +26,7 @@ GameInstanceSchema
 });
 
 module.exports = mongoose.model('GameInstance', GameInstanceSchema);
+
+
+
+
