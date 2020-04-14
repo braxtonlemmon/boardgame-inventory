@@ -1,0 +1,13 @@
+<h1 class="content-title"><%= title %></h1>
+
+<div class="list">
+  <ul>
+    <% category_list.forEach(category => { %>
+    <li>
+      <a href="<%= category.url %>">
+        <%= category.name %>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</div>

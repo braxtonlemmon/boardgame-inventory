@@ -86,6 +86,15 @@ a {
   text-decoration: none;
 }
 
+li {
+  list-style: none;
+}
+
+ul, li {
+  margin: 0;
+  padding: 0;
+}
+
 /* Container */
 .container {
   display: grid;
@@ -117,9 +126,6 @@ a {
   display: flex;
   justify-content: center;
   cursor: pointer;
-}
-
-.sidebar-link >* {
   color: black;
 }
 
@@ -136,3 +142,6 @@ a {
 }
 
 /* Content */
+.content {
+  padding: 30px;
+}

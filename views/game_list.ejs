@@ -1,0 +1,11 @@
+<h1 class="content-title"><%= title %></h1>
+
+<div class="list">
+  <ul>
+    <% game_list.forEach(game => { %> 
+      <a href="<%= game.url %>">
+        <li><%= game.name %></li>
+      </a>
+    <% }) %>
+  </ul>
+</div>

@@ -1,0 +1,15 @@
+<h1 class="title"><%= title %></h1>
+
+<div class="list">
+  <ul>
+    <% if (locals.category_games.length > 0) { %> 
+      <% category_games.forEach(game => { %>
+      <a href="<%= game.url %>">
+        <li><%= game.name %></li>
+      </a>
+      <% }) %>
+    <% } else { %>
+      <li>There are currently no games in this category.</li>
+    <% } %>
+  </ul>
+</div>

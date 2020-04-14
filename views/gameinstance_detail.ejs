@@ -1,0 +1,17 @@
+<h1 class="title"><%= title %></h1>
+
+<h2>Game</h2>
+<a href="<%= gameinstance.game.url %>"><%= gameinstance.game.name %></a>
+
+<h2>Condition</h2>
+<p><%= gameinstance.condition %></p>
+
+<h2>Language</h2>
+<% if (gameinstance.language) { %>
+  <p><%= gameinstance.language %></p>
+<% } else { %>
+  <p>Unknown</p>
+<% } %>
+
+<h2>Price</h2>
+<p>$<%= gameinstance.price %></p>
