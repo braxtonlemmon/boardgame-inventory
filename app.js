@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const expressLayouts = require('express-ejs-layouts');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -15,6 +16,8 @@ const mongoDB = 'mongodb+srv://braxton:kKhvTHo8xwnLkaXh@cluster0-pui9s.mongodb.n
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+app.use(expressLayouts);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
