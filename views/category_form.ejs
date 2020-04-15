@@ -11,16 +11,16 @@
     value="<%= locals.category ? category.name : '' %>"
   >
   <label for="description">Description:</label>
-  <input 
+  <textarea 
     type="text"
     id="description"
     name="description"
     class="form-input"
     placeholder="Category description"
     value="<%= locals.category ? category.description : '' %>"  
-  >
+  ><%= category.description %></textarea>
 
-  <button class="form-submit" type="submit">Create</button>
+  <button class="form-submit" type="submit">Submit</button>
 </form>
 
 <% if (locals.errors) { %>
