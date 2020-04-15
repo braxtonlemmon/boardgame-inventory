@@ -34,13 +34,44 @@ exports.category_detail = function(req, res, next) {
   });
 };
 
-exports.category_create_get = function(req, res) {
-  res.send('category create get');
+exports.category_create_get = function(req, res, next) {
+  res.render('category_form', { title: 'New Category' });
 };
 
-exports.category_create_post = function (req, res) {
-  res.send('category create post');
-}
+exports.category_create_post = [
+  body('name', 'Category name required').trim().isLength({ min: 1 }),
+  body('description', 'Category description required').trim().isLength({ min: 1 }),
+  body('name').escape(),
+  body('description').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const category = new Category(
+      { 
+        name: req.body.name,
+        description: req.body.description
+       }
+    );
+    if (!errors.isEmpty()) {
+      res.render('category_form', { title: 'New Category', category: category, errors: errors.array() });
+      return;
+    }
+    else {
+      Category.findOne({ 'name': req.body.name })
+        .exec(function (err, found_category) {
+          if (err) { return next(err) }
+          if (found_category) {
+            res.redirect(found_category.url);
+          }
+          else {
+            category.save(function (err) {
+              if (err) { return next(err) }
+              res.redirect(category.url);
+            });
+          }
+        });
+    }
+  }
+];
 
 exports.category_delete_get = function(req, res) {
   res.send('category delete get');

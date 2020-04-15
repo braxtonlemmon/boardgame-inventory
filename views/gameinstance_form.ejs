@@ -1,0 +1,68 @@
+<h1 class="title"><%= title %></h1>
+
+<form action="" method="POST">
+  <label for="game">Game</label>
+  <select name="game" id="game">
+    <% game_list.forEach(game => { %>
+      <% if (locals.gameinstance) { %>
+        <option 
+          value="<%= game._id %>"
+          selected="<%= game._id.toString() == gameinstance.game ? 'true' : 'false' %>"
+        >
+          <%= game.name %>
+        </option>
+      <% }  else { %>
+        <option value="<%= game._id %>">
+          <%= game.name %>
+        </option>
+      <% } %>
+    <% }) %>
+  </select>
+
+  <label for="language">Language</label>
+  <input 
+    type="text"
+    id="language"
+    name="language"
+    class="form-input"
+    placeholder="English, French, German, etc."
+    value="<%= locals.gameinstance ? gameinstance.language : '' %>" 
+  >
+
+  <label for="condition">Condition</label>
+  <select 
+    name="condition"  
+    id="condition"
+    class="form-input"
+    placeholder="Select condition"
+    type="select"
+    required="true"
+  >
+    <option value="New">New</option>
+    <option value="Excellent">Excellent</option>
+    <option value="Good">Good</option>
+    <option value="Fair">Fair</option>
+    <option value="Poor">Poor</option>
+  </select>
+
+  <label for="price">Price</label>
+  <input 
+    type="number"
+    id="price"
+    name="price"
+    class="form-input"
+    placeholder="1"
+    min="1"
+    max="500"
+    value="<%= locals.gameinstance ? gameinstance.price : '' %>"
+  >
+  <button class="form-submit">Create</button>
+</form>
+
+<% if (locals.errors) { %>
+  <ul>
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>    
+    <% }) %>
+  </ul>
+<% } %>

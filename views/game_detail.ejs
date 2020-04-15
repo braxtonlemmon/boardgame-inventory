@@ -3,16 +3,11 @@
 <h2>Description</h2>
 <p><%= game.description %></p>
 
-<% if (locals.game.category.length > 0) { %>
-  <h2><%= locals.game.category.length > 1 ? 'Categories' : 'Category' %></h2>
-  <ul>
-    <% locals.game.category.forEach(category => { %>
-      <a href="<%= category.url %>">
-        <li><%= category.name %></li>
-      </a>
-    <% }) %>
-  </ul>
-<% } %>
+
+<h2>Category</h2>
+<a href="<%= game.category.url %>">
+  <p><%= game.category.name %></p>
+</a>
 
 <h2>Price (new)</h2>
 <p>$<%= game.price %></p>

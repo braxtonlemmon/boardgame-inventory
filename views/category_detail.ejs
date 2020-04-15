@@ -1,8 +1,11 @@
 <h1 class="title"><%= title %></h1>
 
+<h2>Description:</h2>
+<p><%= category.description %></p>
 <div class="list">
   <ul>
     <% if (locals.category_games.length > 0) { %> 
+      <h2>Games:</h2>
       <% category_games.forEach(game => { %>
       <a href="<%= game.url %>">
         <li><%= game.name %></li>

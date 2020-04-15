@@ -1,5 +1,6 @@
 const Game = require('../models/game');
 const GameInstance = require('../models/gameinstance');
+const Category = require('../models/category');
 const async = require('async');
 const { body, validationResult } = require('express-validator');
 
@@ -34,13 +35,50 @@ exports.game_detail = function(req, res, next) {
   })
 };
 
-exports.game_create_get = function(req, res) {
-  res.send('game create get');
+exports.game_create_get = function(req, res, next) {
+  Category.find({}, 'name')
+  .exec(function (err, category_list) {
+    if (err) { return next(err) }
+    res.render('game_form', { title: 'New Game', category_list: category_list });
+  })
 };
 
-exports.game_create_post = function (req, res) {
-  res.send('game create post');
-}
+exports.game_create_post = [
+  body('name', 'Game name must not be empty.').trim().isLength({ min: 1 }),
+  body('description', 'Game description must not be empty.').trim().isLength({ min: 1 }),
+  body('price', 'Game price must not be empty.').trim().isInt({ min: 1 }),
+  body('qty', 'Game quantity must not be empty.').trim().isInt({ min: 0 }),
+
+  body('*').escape(),
+  body('category.*').escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const game = new Game(
+      {
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        qty: req.body.qty,
+        category: req.body.category
+      }
+    )
+    if (!errors.isEmpty()) {
+      Category.find({}, 'name')
+      .exec(function (err, category_list) {
+        if (err) { return next(err) }
+        res.render('game_form', { title: 'Create Book', game: game, category_list: category_list, errors: errors.array() });
+      });
+      return;
+    }
+    else {
+      game.save(function (err) {
+        if (err) { return next(err) }
+        res.redirect(game.url);
+      })
+    }
+  }
+];
 
 exports.game_delete_get = function(req, res) {
   res.send('game delete get');

@@ -1,4 +1,6 @@
 const GameInstance = require('../models/gameinstance');
+const Game = require('../models/game');
+const { body,  validationResult } = require('express-validator');
 
 // Index
 exports.gameinstance_list = function(req, res, next) {
@@ -24,13 +26,48 @@ exports.gameinstance_detail = function(req, res, next) {
   });
 };
 
-exports.gameinstance_create_get = function(req, res) {
-  res.send('gameinstance create get');
+exports.gameinstance_create_get = function(req, res, next) {
+  Game.find({}, 'name')
+  .exec(function (err, game_list) {
+    if (err) { return next(err) }
+    res.render('gameinstance_form', { title: 'Create Used Copy', game_list: game_list });
+  });
 };
 
-exports.gameinstance_create_post = function (req, res) {
-  res.send('gameinstance create post');
-}
+exports.gameinstance_create_post = [
+  body('game', 'Game must be specified.').trim().isLength({ min: 1 }),
+  body('language', 'Language must be specified').trim().isLength({ min: 1 }),
+  body('condition', 'Condition must be specified').trim().isLength({ min: 1 }),
+  body('price', 'Price must be specified').trim().isInt({ min: 1 }),
+
+  body('*').escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const gameinstance = new GameInstance(
+      {
+        game: req.body.game,
+        language: req.body.language,
+        condition: req.body.condition,
+        price: req.body.price
+      }
+    )
+    if (!errors.isEmpty()) {
+      Game.find({}, 'name')
+      .exec(function (err, game_list) {
+        if (err) { return next(err) }
+        res.render('gameinstance_form', { title: 'Create Used Copy', gameinstance: gameinstance, game_list: game_list, errors: errors.array() });
+      })
+      return;
+    } 
+    else {
+      gameinstance.save(function (err) {
+        if (err) { return next(err) }
+        res.redirect(gameinstance.url);
+      })
+    }
+  }
+]
 
 exports.gameinstance_delete_get = function(req, res) {
   res.send('gameinstance delete get');

@@ -1,0 +1,32 @@
+<h1 class="title"><%= title %></h1>
+
+<form action="" method="POST">
+  <label for="name">Category:</label>
+  <input 
+    type="text"
+    id="name"
+    name="name"
+    class="form-input"
+    placeholder="Category name"
+    value="<%= locals.category ? category.name : '' %>"
+  >
+  <label for="description">Description:</label>
+  <input 
+    type="text"
+    id="description"
+    name="description"
+    class="form-input"
+    placeholder="Category description"
+    value="<%= locals.category ? category.description : '' %>"  
+  >
+
+  <button class="form-submit" type="submit">Create</button>
+</form>
+
+<% if (locals.errors) { %>
+  <ul>
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
