@@ -1,0 +1,23 @@
+<h1 class="title"><%= title %></h1>
+
+<% if (category_games.length) { %>
+  <p>Delete the following games before deleting this category:</p>
+  <ul>
+    <% category_games.forEach(game => { %>
+      <li><a href="<%= game.url %>"><%= game.name %></a></li>
+    <% }) %>
+  </ul>
+<% } else { %>
+  <p>Do you really want to delete this category?</p>
+  <form action="" method="POST">
+    <input 
+      type="hidden"
+      id="categoryid"
+      name="categoryid"
+      value="<%= category._id %>"
+      class="form-input"
+      required="true"
+    >
+    <button class="form-submit" type="submit">Delete</button>
+  </form>
+<% } %>

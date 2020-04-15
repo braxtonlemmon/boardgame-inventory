@@ -73,12 +73,48 @@ exports.category_create_post = [
   }
 ];
 
-exports.category_delete_get = function(req, res) {
-  res.send('category delete get');
+exports.category_delete_get = function(req, res, next) {
+  async.parallel({
+    category: function(callback) {
+      Category.findById(req.params.id)
+      .exec(callback)
+    },
+    category_games: function(callback) {
+      Game.find({ 'category': req.params.id })
+      .exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+    if (results.category === null) {
+      res.redirect('/categories');
+    }
+    res.render('category_delete', { title: 'Delete Category', category: results.category, category_games: results.category_games });
+  });
 };
 
-exports.category_delete_post = function (req, res) {
-  res.send('category delete post');
+exports.category_delete_post = function (req, res, next) {
+  async.parallel({
+    category: function(callback) {
+      Category.findById(req.params.id)
+      .exec(callback)
+    },
+    category_games: function(callback) {
+      Game.find({ 'category': req.params.id })
+      .exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+    if (results.category_games.length > 0) {
+      res.render('category_delete', { title: 'Delete Category', category: results.category, category_games: results.category_games });
+      return;
+    }
+    else {
+      Category.findByIdAndRemove(req.body.categoryid, function deleteCategory(err) {
+        if (err) { return next(err) }
+        res.redirect('/categories');
+      });
+    }
+  });
 };
 
 exports.category_update_get = function (req, res) {

@@ -69,12 +69,28 @@ exports.gameinstance_create_post = [
   }
 ]
 
-exports.gameinstance_delete_get = function(req, res) {
-  res.send('gameinstance delete get');
-};
+exports.gameinstance_delete_get = function(req, res, next) {
+  GameInstance.findById(req.params.id)
+  .exec(function (err, gameinstance) {
+    if (err) { return next(err) }
+    if (gameinstance === null) {
+      const err = new Error('Game copy not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('gameinstance_delete', { title: 'Delete Used Copy', gameinstance: gameinstance });
+  })
+}
 
-exports.gameinstance_delete_post = function (req, res) {
-  res.send('gameinstance delete post');
+exports.gameinstance_delete_post = function (req, res, next) {
+  GameInstance.findById(req.params.id)
+  .exec(function (err, gameinstance) {
+    if (err) { return next(err) }
+    GameInstance.findByIdAndRemove(req.body.gameinstanceid, function deleteGameInstance(err) {
+      if (err) { return next(err) }
+      res.redirect('/gameinstances');
+    });
+  });
 };
 
 exports.gameinstance_update_get = function (req, res) {

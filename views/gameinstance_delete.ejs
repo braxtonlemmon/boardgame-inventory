@@ -1,0 +1,14 @@
+<h1 class="title"><%= title %></h1>
+
+<p>Do you really want to delete this copy?</p>
+<form action="" method="POST">
+  <input 
+    type="hidden"
+    id="gameinstanceid"
+    name="gameinstanceid"
+    required="true"
+    value="<%= gameinstance._id %>"
+    class="form-input"  
+  >
+  <button class="form-submit" type="submit">Delete</button>
+</form>

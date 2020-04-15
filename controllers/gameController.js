@@ -80,13 +80,50 @@ exports.game_create_post = [
   }
 ];
 
-exports.game_delete_get = function(req, res) {
-  res.send('game delete get');
+exports.game_delete_get = function(req, res, next) {
+  async.parallel({
+    game_instances: function(callback) {
+      GameInstance.find({ 'game': req.params.id })
+      .exec(callback)
+    },
+    game: function(callback) {
+      Game.findById(req.params.id)
+      .exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+    if (results.game === null) {
+      res.redirect('/games');
+    }
+    res.render('game_delete', { title: 'Delete Game', game_instances: results.game_instances, game: results.game });
+  });
 };
 
-exports.game_delete_post = function (req, res) {
-  res.send('game delete post');
+exports.game_delete_post = function (req, res, next) {
+  async.parallel({
+    game_instances: function(callback) {
+      GameInstance.find({ 'game': req.params.id })
+      .exec(callback)
+    },
+    game: function(callback) {
+      Game.findById(req.params.id)
+      .exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+    if (results.game_instances.length > 0) {
+      res.render('game_delete', { title: 'Delete Game', game_instances: results.game_instances, game: results.game });
+      return;
+    }
+    else {
+      Game.findByIdAndRemove(req.body.gameid, function deleteGame(err) {
+        if (err) { return next(err) }
+        res.redirect('/games');
+      });
+    }
+  });
 };
+
 
 exports.game_update_get = function (req, res) {
   res.send('game update get');

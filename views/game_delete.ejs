@@ -1,0 +1,23 @@
+<h1 class="title"><%= title %></h1>
+
+<% if (game_instances.length) { %>
+  <p>Delete the following used copies before deleting this game:</p>
+  <ul>
+    <% game_instances.forEach((game, index) => { %>
+      <li><a href="<%= game.url %>"><%= `(${index}) ${game.language}` %></a></li>
+    <% }) %>
+  </ul>
+<% } else { %>
+  <p>Do you really want to delete this game?</p>
+  <form action="" method="POST">
+    <input 
+      type="hidden"
+      id="gameid"
+      name="gameid"
+      value="<%= game._id %>"  
+      required="true"
+      class="form-input"
+    >
+    <button class="form-submit" type="submit">Delete</button>
+  </form>
+<%} %>
