@@ -7,8 +7,10 @@ const GameSchema = new Schema(
     description: { type: String, required: true },
     category:    { type: Schema.Types.ObjectId, ref: 'Category' },
     price:       { type: Number, required: true },
-    qty:         { type: Number, required: true }        
-  }
+    qty:         { type: Number, required: true },
+    image:       { type: String, required: false}     
+  },
+  { strict: false }
 );
 
 GameSchema

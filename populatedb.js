@@ -28,7 +28,7 @@ let games = [];
 let categories = [];
 let gameinstances = [];
 
-function gameCreate(name, description, category, price, qty, cb) {
+function gameCreate(name, description, category, price, qty, image, cb) {
   gamedetail = { name, description, category, price, qty };
   const game = new Game(gamedetail);
   game.save(function (err) {
@@ -119,6 +119,7 @@ function createGames(cb) {
           categories[0],
           30,
           2,
+          'false',
           callback
         );
       },
@@ -129,6 +130,7 @@ function createGames(cb) {
           categories[0],
           44,
           0,
+          'false',
           callback
         );
       },
@@ -139,6 +141,7 @@ function createGames(cb) {
           categories[1],
           16,
           2,
+          'false',
           callback
         );
       },
@@ -149,6 +152,7 @@ function createGames(cb) {
           categories[1],
           19,
           1,
+          'false',
           callback
         );
       },
@@ -159,6 +163,7 @@ function createGames(cb) {
           categories[2],
           47,
           3,
+          'false',
           callback 
         )
       }

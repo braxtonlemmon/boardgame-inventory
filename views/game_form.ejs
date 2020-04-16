@@ -1,6 +1,12 @@
 <h1 class="title"><%= title %></h1>
 
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
+  <input 
+    type="file" 
+    name="game-image" 
+    class="form-input"
+    value="<%= locals.game ? game.image : '' %>"
+  >
   <label for="name">Name:</label>
   <input 
     type="text"
@@ -41,7 +47,6 @@
       <% if (locals.game) { %>
         <option 
           value="<%= category._id %>"
-          <%= (category._id.toString() == game.category._id || category._id.toString() == game.category) ? 'selected' : false %>
         >
           <%= category.name %>
         </option>
