@@ -7,7 +7,7 @@
       <% if (locals.gameinstance) { %>
         <option 
           value="<%= game._id %>"
-          selected="<%= game._id.toString() == gameinstance.game ? 'true' : 'false' %>"
+          <%= (gameinstance.game.toString() === game._id.toString() || gameinstance.game._id === game._id.toString()) ? "selected" : false %>
         >
           <%= game.name %>
         </option>
@@ -38,11 +38,26 @@
     type="select"
     required="true"
   >
-    <option value="New">New</option>
-    <option value="Excellent">Excellent</option>
-    <option value="Good">Good</option>
-    <option value="Fair">Fair</option>
-    <option value="Poor">Poor</option>
+    <option 
+      value="New"      
+      <%= locals.gameinstance ? (gameinstance.condition === 'New' ? "selected" : false) : false %> 
+    >New</option>
+    <option 
+      value="Excellent"
+      <%= locals.gameinstance ? (gameinstance.condition === 'Excellent' ? "selected" : false) : false %> 
+    >Excellent</option>
+    <option 
+      value="Good"
+      <%= locals.gameinstance ? (gameinstance.condition === 'Good' ? "selected" : false) : false %> 
+    >Good</option>
+    <option 
+      value="Fair"
+      <%= locals.gameinstance ? (gameinstance.condition === 'Fair' ? "selected" : false) : false %> 
+    >Fair</option>
+    <option 
+      value="Poor"
+      <%= locals.gameinstance ? (gameinstance.condition === 'Poor' ? "selected" : false) : false %> 
+    >Poor</option>
   </select>
 
   <label for="price">Price</label>
@@ -56,7 +71,7 @@
     max="500"
     value="<%= locals.gameinstance ? gameinstance.price : '' %>"
   >
-  <button class="form-submit">Create</button>
+  <button class="form-submit">Submit</button>
 </form>
 
 <% if (locals.errors) { %>

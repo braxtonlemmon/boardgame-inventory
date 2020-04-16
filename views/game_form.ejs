@@ -19,7 +19,7 @@
     class="form-input"
     placeholder="Game description"
     value="<%= locals.game ? game.description : '' %>"
-  ></textarea>
+  ><%= locals.game ? game.description : '' %></textarea>
 
 
   <label for="category">Category</label>
@@ -41,7 +41,7 @@
       <% if (locals.game) { %>
         <option 
           value="<%= category._id %>"
-          selected="<%= (category._id.toString() == game.category._id || category._id.toString() == game.category) ? 'selected' : false %>"
+          <%= (category._id.toString() == game.category._id || category._id.toString() == game.category) ? 'selected' : false %>
         >
           <%= category.name %>
         </option>
@@ -73,7 +73,7 @@
     value="<%= locals.game ? game.qty : '0' %>"
   >
 
-  <button class="form-submit" type="submit">Create</button>
+  <button class="form-submit" type="submit">Submit</button>
 </form>
 
 <% if (locals.errors) { %>

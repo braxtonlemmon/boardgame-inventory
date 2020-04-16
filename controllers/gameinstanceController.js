@@ -1,5 +1,6 @@
 const GameInstance = require('../models/gameinstance');
 const Game = require('../models/game');
+const async = require('async');
 const { body,  validationResult } = require('express-validator');
 
 // Index
@@ -93,10 +94,59 @@ exports.gameinstance_delete_post = function (req, res, next) {
   });
 };
 
-exports.gameinstance_update_get = function (req, res) {
-  res.send('gameinstance update get');
+exports.gameinstance_update_get = function (req, res, next) {
+  async.parallel({
+    gameinstance: function(callback) {
+      GameInstance.findById(req.params.id)
+      .exec(callback)
+    },
+    games: function(callback) {
+      Game.find({}, 'name')
+      .exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+    if (results.gameinstance === null) {
+      const err = new Error('Game copy not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('gameinstance_form', { title: 'Update Game Copy', gameinstance: results.gameinstance, game_list: results.games });
+  });  
 };
 
-exports.gameinstance_update_post = function(req, res) {
-  res.send('gameinstance update post');
-};
+exports.gameinstance_update_post = [
+  body('game', 'Game must be specified.').trim().isLength({ min: 1 }),
+  body('language', 'Language must be specified').trim().isLength({ min: 1 }),
+  body('condition', 'Condition must be specified').trim().isLength({ min: 1 }),
+  body('price', 'Price must be specified').trim().isInt({ min: 1 }),
+
+  body('*').escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const gameinstance = new GameInstance(
+      {
+        game: req.body.game,
+        language: req.body.language,
+        condition: req.body.condition,
+        price: req.body.price,
+        _id: req.params.id
+      }
+    )
+    if (!errors.isEmpty()) {
+      Game.find({}, 'name')
+      .exec(function (err, games) {
+        if (err) { return next(err) }
+        res.render('gameinstance_form', { title: 'Update Game Copy', game_list: games, gameinstance: gameinstance, errors: errors.array() });
+      })
+      return;
+    } 
+    else {
+      GameInstance.findByIdAndUpdate(req.params.id, gameinstance, {}, function(err, theinstance) {
+        if (err) { return next(err) }
+        res.redirect(theinstance.url);
+      })
+    }
+  }
+]

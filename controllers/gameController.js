@@ -67,7 +67,7 @@ exports.game_create_post = [
       Category.find({}, 'name')
       .exec(function (err, category_list) {
         if (err) { return next(err) }
-        res.render('game_form', { title: 'Create Book', game: game, category_list: category_list, errors: errors.array() });
+        res.render('game_form', { title: 'Create Game', game: game, category_list: category_list, errors: errors.array() });
       });
       return;
     }
@@ -125,10 +125,61 @@ exports.game_delete_post = function (req, res, next) {
 };
 
 
-exports.game_update_get = function (req, res) {
-  res.send('game update get');
+exports.game_update_get = function (req, res, next) {
+  async.parallel({
+    game: function(callback) {
+      Game.findById(req.params.id)
+      .exec(callback)
+    },
+    categories: function(callback) {
+      Category.find({}, 'name')
+      .exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+    if (results.game === null) {
+      const err = new Error('Game not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('game_form', { title: 'Update Game', category_list: results.categories, game: results.game });
+  });
 };
 
-exports.game_update_post = function(req, res) {
-  res.send('game update post');
-};
+exports.game_update_post = [
+  body('name', 'Game name must not be empty.').trim().isLength({ min: 1 }),
+  body('description', 'Game description must not be empty.').trim().isLength({ min: 1 }),
+  body('price', 'Game price must not be empty.').trim().isInt({ min: 1 }),
+  body('qty', 'Game quantity must not be empty.').trim().isInt({ min: 0 }),
+
+  body('*').escape(),
+  body('category.*').escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const game = new Game(
+      {
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        qty: req.body.qty,
+        category: req.body.category,
+        _id: req.params.id
+      }
+    )
+    if (!errors.isEmpty()) {
+      Category.find({}, 'name')
+        .exec(function (err, category_list) {
+          if (err) { return next(err) }
+          res.render('game_form', { title: 'Update Game', game: game, category_list: category_list, errors: errors.array() });
+        });
+      return;
+    }
+    else {
+      Game.findByIdAndUpdate(req.params.id, game, {}, function(err, thegame) {
+        if (err) { return next(err) }
+        res.redirect(thegame.url);
+      });
+    }
+  }
+];
