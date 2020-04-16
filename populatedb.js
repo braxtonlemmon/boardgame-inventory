@@ -29,7 +29,7 @@ let categories = [];
 let gameinstances = [];
 
 function gameCreate(name, description, category, price, qty, image, cb) {
-  gamedetail = { name, description, category, price, qty };
+  gamedetail = { name, description, category, price, qty, image };
   const game = new Game(gamedetail);
   game.save(function (err) {
     if (err) {
