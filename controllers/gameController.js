@@ -3,20 +3,21 @@ const GameInstance = require('../models/gameinstance');
 const Category = require('../models/category');
 const async = require('async');
 const { body, validationResult } = require('express-validator');
-const multer = require('multer');
+// const multer = require('multer');
+const upload = require('../services/file-upload');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/uploads/')
-  },
-  filename: function(req, file, cb) {
-    const ext = file.originalname.split('.').pop();
-    cb(null, file.fieldname + '-' + Date.now() + '.' + ext);
-  }
-})
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, './public/uploads/')
+//   },
+//   filename: function(req, file, cb) {
+//     const ext = file.originalname.split('.').pop();
+//     cb(null, file.fieldname + '-' + Date.now() + '.' + ext);
+//   }
+// })
 
-const upload = multer({ storage: storage });
-// Index
+// const upload = multer({ storage: storage });
+// // Index
 exports.game_list = function(req, res, next) {
   Game.find({}, 'name')
     .exec(function (err, list_games) {
@@ -56,18 +57,18 @@ exports.game_create_get = function(req, res, next) {
 };
 
 exports.game_create_post = [
-  upload.single("game-image"),
-
+  upload.single('image'),
   body("name", "Game name must not be empty.").trim().isLength({ min: 1 }),
   body("description", "Game description must not be empty.")
-    .trim()
-    .isLength({ min: 1 }),
+  .trim()
+  .isLength({ min: 1 }),
   body("price", "Game price must not be empty.").trim().isInt({ min: 1 }),
   body("qty", "Game quantity must not be empty.").trim().isInt({ min: 0 }),
-
+  
   body("*").escape(),
-
+  
   (req, res, next) => {
+    console.log(req.file);
     const errors = validationResult(req);
     const game = new Game({
       name: req.body.name,
@@ -75,7 +76,7 @@ exports.game_create_post = [
       price: req.body.price,
       qty: req.body.qty,
       category: req.body.category,
-      image: req.file === undefined ? false : req.file.filename
+      image: req.file === undefined ? false : req.file.location
     });
     if (!errors.isEmpty()) {
       Category.find({}, "name").exec(function (err, category_list) {
@@ -169,7 +170,7 @@ exports.game_update_get = function (req, res, next) {
 };
 
 exports.game_update_post = [
-  upload.single("game-image"),
+  upload.single("image"),
 
   body("name", "Game name must not be empty.").trim().isLength({ min: 1 }),
   body("description", "Game description must not be empty.")
@@ -194,7 +195,7 @@ exports.game_update_post = [
       price: req.body.price,
       qty: req.body.qty,
       category: req.body.category,
-      image: req.file === undefined ? oldGame.image : req.file.filename,
+      image: req.file === undefined ? oldGame.image : req.file.location,
       _id: req.params.id,
     });
     if (!errors.isEmpty()) {

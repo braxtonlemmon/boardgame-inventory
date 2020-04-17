@@ -1,8 +1,7 @@
 <h1 class="title"><%= title %></h1>
 <% if (game.image !== 'false') { %>
-  <img src=<%= `http://localhost:3000/uploads/${game.image}` %>
+  <img src=<%= game.image %>>
 <% } %>
-
 <h2>Description</h2>
 <p><%= game.description %></p>
 
