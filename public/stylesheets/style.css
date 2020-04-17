@@ -146,6 +146,10 @@ ul, li {
   padding: 30px;
 }
 
+.game-image {
+  height: 200px;
+}
+
 /* FORMS */
 
 form {
