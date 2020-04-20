@@ -134,8 +134,8 @@ exports.game_delete_post = function (req, res, next) {
     }
   }, function (err, results) {
     if (err) { return next(err) }
-    if (results.game_instances.length > 0) {
-      res.render('game_delete', { title: 'Delete Game', game_instances: results.game_instances, game: results.game });
+    if ((results.game_instances.length > 0) || (req.body.password !== process.env.ADMIN_PASSWORD)) {
+      res.render('game_delete', { title: 'Delete Game!', game_instances: results.game_instances, game: results.game });
       return;
     }
     else {
