@@ -3,20 +3,8 @@ const GameInstance = require('../models/gameinstance');
 const Category = require('../models/category');
 const async = require('async');
 const { body, validationResult } = require('express-validator');
-// const multer = require('multer');
 const upload = require('../services/file-upload');
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, './public/uploads/')
-//   },
-//   filename: function(req, file, cb) {
-//     const ext = file.originalname.split('.').pop();
-//     cb(null, file.fieldname + '-' + Date.now() + '.' + ext);
-//   }
-// })
-
-// const upload = multer({ storage: storage });
 // // Index
 exports.game_list = function(req, res, next) {
   Game.find({}, 'name')
@@ -68,7 +56,6 @@ exports.game_create_post = [
   body("*").escape(),
   
   (req, res, next) => {
-    console.log(req.file);
     const errors = validationResult(req);
     const game = new Game({
       name: req.body.name,
@@ -96,7 +83,6 @@ exports.game_create_post = [
         if (err) {
           return next(err);
         }
-        console.log(game.img);
         res.redirect(game.url);
       });
     }

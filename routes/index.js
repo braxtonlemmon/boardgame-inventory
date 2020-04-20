@@ -3,9 +3,7 @@ const router = express.Router();
 const category_controller = require('../controllers/categoryController');
 const game_controller = require('../controllers/gameController');
 const gameinstance_controller = require('../controllers/gameinstanceController');
-const upload = require('../services/file-upload');
 
-const singleUpload = upload.single('image');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Board Game Shop' });
@@ -39,14 +37,6 @@ router.get('/game/:id', game_controller.game_detail);
 // GET request for all games
 router.get('/games', game_controller.game_list);
 
-router.post('/image-upload', function (req, res) {
-  singleUpload(req, res, function (err) {
-    if (err) {
-      return res.status(422).send({ errors: [{ title: 'File Upload Error', detail: err.message }] });
-    }
-    return res.json({ 'imageUrl': req.file.location })
-  })
-})
 //////////////////////
 /* CATEGORY routes */
 ////////////////////

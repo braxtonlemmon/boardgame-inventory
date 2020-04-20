@@ -10,7 +10,6 @@ exports.category_list = function(req, res, next) {
       if (err) { return next(err) }
       res.render('category_list', { title: 'Categories', category_list: list_categories });
     })
-  
 };
 
 exports.category_detail = function(req, res, next) {
