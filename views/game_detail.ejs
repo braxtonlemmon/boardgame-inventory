@@ -14,14 +14,14 @@
 <p>$<%= game.price %></p>
 
 <% if (locals.game_instances.length > 0) { %>
-  <h2>Used copies available (<%= game.qty %>)</h2>
+  <h2>Used copies available (<%= game_instances.length %>)</h2>
   <ul>
     <% locals.game_instances.forEach((instance, index) => { %> 
       <a href="<%= instance.url %>">
         <li>
           (<%= index + 1 %>) 
-          <%= instance.condition %>
-          <%= instance.price %>
+          <%= instance.condition %> -
+          [$<%= instance.price %>]
           <%= instance.language %>
         </li>
       </a>
@@ -29,8 +29,13 @@
   </ul>
 <% } %>
 
-<p>
-  <a href="<%= `${game.url}/delete` %>">Delete</a>
-  <a href="<%= `${game.url}/update` %>">Update</a>
-</p>
+<div class="button-box">  
+  <a href="<%= `${game.url}/delete` %>">
+    <div class="form-submit">Delete</div>
+  </a> 
+  <a href="<%= `${game.url}/update` %>">
+    <div class="form-submit">Update</div>
+  </a>
+</div>
+
 

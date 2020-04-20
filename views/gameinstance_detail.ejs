@@ -16,7 +16,11 @@
 <h2>Price</h2>
 <p>$<%= gameinstance.price %></p>
 
-<p>
-  <a href="<%= `${gameinstance.url}/delete` %>">Delete</a>
-  <a href="<%= `${gameinstance.url}/update` %>">Update</a>
-</p>
+<div class="button-box">
+  <a href="<%= `${gameinstance.url}/delete` %>">
+    <div class="form-submit">Delete</div>
+  </a>
+  <a href="<%= `${gameinstance.url}/update` %>">
+    <div class="form-submit">Update</div>
+  </a>
+</div>

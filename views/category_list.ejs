@@ -3,11 +3,9 @@
 <div class="list">
   <ul>
     <% category_list.forEach(category => { %>
-    <li>
       <a href="<%= category.url %>">
-        <%= category.name %>
+        <li class="list-item"><%= category.name %></li>
       </a>
-    </li>
     <% }) %>
   </ul>
 </div>
