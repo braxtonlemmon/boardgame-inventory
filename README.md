@@ -8,7 +8,7 @@ Project based on The Odin Project Node.js [curriculum](https://www.theodinprojec
 - Practice setting up database schemas and models
 - Construct appropriate routes and controllers
 - Build functional forms
-- Upload images for inventory items using the middleware [Multer](https://github.com/expressjs/multer)
+- Upload images for inventory items using Multer, Multer-S3, and AWS middleware.
 - Require users to input an admin password before performing delete and update actions
 - Deploy to Heroku
 
