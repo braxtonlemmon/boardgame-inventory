@@ -8,8 +8,13 @@ require('dotenv').config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const fileRoutes = require('./routes/file-upload');
+const compression = require('compression');
+const helmet = require('helmet');
+
 var app = express();
 
+app.use(helmet());
+app.use(compression());
 // Set up mongoose connection
 const mongoose = require('mongoose');
 const mongoDB = 'mongodb+srv://braxton:kKhvTHo8xwnLkaXh@cluster0-pui9s.mongodb.net/test?retryWrites=true&w=majority';
